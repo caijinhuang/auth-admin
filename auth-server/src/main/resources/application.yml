@@ -1,0 +1,30 @@
+server:
+  port: 8087
+  servlet:
+    context-path: /auth
+
+
+spring:
+
+  profiles:
+    active: product
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot?charset=utf8mb4&serverTimezone=UTC&useSSL=false
+    username: root
+    password: cjh
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+
+  redis:
+    password: redisroot
+    host: 192.168.0.110
+    port: 6379
