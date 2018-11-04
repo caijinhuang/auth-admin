@@ -1,5 +1,5 @@
 server:
-  port: 8087
+  port: 8086
   servlet:
     context-path: /auth
 
@@ -11,7 +11,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/boot?charset=utf8mb4&serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://localhost:3306/AUTH_CENTER?charset=utf8mb4&serverTimezone=UTC&useSSL=false
     username: root
     password: cjh
 
