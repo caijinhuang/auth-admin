@@ -2,17 +2,19 @@
 /***************************************************************************************************
  *  Copyright (c) 2018  the original author or authors
  *  @author: 小Cai先森
- *  @lastModified: 18-9-2 下午10:40
- *  @createTime: 2018-11-04 21:35:40
- *  @classPath: com.caijh.authserver.constant.ResultCode
+ *  @lastModified: 18-11-10 下午3:01
+ *  @createTime: 2018-11-10 15:02:20
+ *  @classPath: com.caijh.authserver.constant.response.ResultCode
+ *  @blog: http://www.cnblogs.com/caijh/default.html?page=1
  **************************************************************************************************/
 
-package com.caijh.authserver.constant;
+package com.caijh.authserver.constant.response;
 
 /**
+ * @author cjh
  * 响应结果状态码枚举类
  */
-public enum ResultCode {
+public enum ResultCode implements BaseResponseCode{
     /**
      * 成功
      */
@@ -48,6 +50,7 @@ public enum ResultCode {
      * 登陆失败
      */
     REGISTER_FAIL("602", "注册失败，该用户已经存在"),
+
     /**
      * 发生异常
      */
@@ -64,7 +67,7 @@ public enum ResultCode {
     PARAMS_ERROR("403", "参数错误 "),
 
     /**
-     * 参数错误
+     * 找不到页面
      */
     NOT_FOUND("404", "哎呀，对象走丢了！ "),
 
@@ -103,14 +106,17 @@ public enum ResultCode {
         this.msg = msg;
     }
 
-    public String val() {
-        return val;
-    }
-
-    public String msg() {
-        return msg;
-    }
 
     private String val;
     private String msg;
+
+    @Override
+    public String getCode() {
+        return val;
+    }
+
+    @Override
+    public String getMessage() {
+        return msg;
+    }
 }

@@ -8,7 +8,7 @@
 
 package com.caijh.authserver.web.exception;
 
-import com.caijh.authserver.constant.ResultCode;
+import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.entity.view.ResponseData;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,13 +36,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseData defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         log.error("访问出错了：", e);
-        ResponseData response = null;
         if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
-            response = new ResponseData(ResultCode.NOT_FOUND);
+            return ResponseData.failed(ResultCode.NOT_FOUND);
         } else {
-            response = new ResponseData(ResultCode.SYS_INNER_ERROR);
+            return ResponseData.build(null,e.getMessage(),ResultCode.SYS_INNER_ERROR.getCode());
         }
-        response.setData(e.getMessage());
-        return response;
     }
 }

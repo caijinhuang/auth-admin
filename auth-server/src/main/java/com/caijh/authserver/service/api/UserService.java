@@ -10,7 +10,7 @@ package com.caijh.authserver.service.api;
 
 
 import com.caijh.authserver.entity.db.User;
-import org.springframework.stereotype.Service;
+import com.caijh.authserver.entity.view.ResponseData;
 
 /**
  * @author cjh
@@ -21,5 +21,5 @@ public interface UserService {
      * 用户注册
      * @return 是否注册成功
      */
-    public boolean register(User user);
+    public ResponseData register(User user);
 }
