@@ -9,7 +9,6 @@
 package com.caijh.authserver.service.impl;
 
 import com.caijh.authserver.constant.response.ResultCode;
-import com.caijh.authserver.constant.userenum.AccountType;
 import com.caijh.authserver.dao.jpa.UserDao;
 import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.ResponseData;
@@ -19,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,19 +37,14 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResponseData register(User user) {
-        AccountType accountType = AccountType.getType(user.getAccountType());
-        if (accountType == null) {
-            return ResponseData.build(null, "注册失败：账户类型错误！", ResultCode.REGISTER_FAIL.getCode());
-        }
 
-        // 账户有效性判断
+        // 新账户有效性判断
         try {
             accountValidate(user);
         } catch (Exception e) {
-            String errorMsg = "注册失败：" + e.getMessage();
-            return ResponseData.build(null, errorMsg, ResultCode.REGISTER_FAIL.getCode());
+            return ResponseData.build(null, e.getMessage(), ResultCode.REGISTER_FAIL.getCode());
         }
 
         // 用户注册
@@ -68,21 +66,37 @@ public class UserServiceImpl implements UserService {
      * @return 是否有效
      */
     private void accountValidate(User user) {
-        User oldUser;
-        if (user.getAccountType().equals("email")) {
-            if (StringUtils.isEmpty(user.getEmail())) {
-                throw new RuntimeException("邮箱不能为空！");
-            }
-            oldUser = userDao.findUserByAccountTypeAndEmail(user.getAccountType(), user.getEmail());
-        } else {
-            if (StringUtils.isEmpty(user.getPhone())) {
-                throw new RuntimeException("电话号码不能为空！");
-            }
-            oldUser = userDao.findUserByAccountTypeAndPhone(user.getAccountType(), user.getPhone());
+        List<User> userList = new ArrayList<>();
+
+        try {
+            String accountType = user.getAccountType();
+            String typeUpper = toUpperCase(accountType);
+            Method userMethod = user.getClass().getMethod("get" + typeUpper);
+            Method daoMethod = userDao.getClass().getMethod("findUserByAccountTypeAnd" + typeUpper,
+                    String.class,
+                    String.class);
+            String value = userMethod.invoke(user).toString();
+            userList = (List<User>) daoMethod.invoke(userDao, accountType, value);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            log.error("用户注册反射执行失败:{}", e);
+            throw new RuntimeException("注册失败");
         }
 
-        if (oldUser != null) {
-            throw new RuntimeException("用户已经存在!");
+        if (!userList.isEmpty()) {
+            throw new RuntimeException("注册失败：用户已经存在!");
         }
+    }
+
+
+    /**
+     * 首字母转成大写
+     *
+     * @param str 要转换的字符串
+     * @return 转换后的字符串
+     */
+    private String toUpperCase(String str) {
+        char[] ch = str.toCharArray();
+        ch[0] -= 32;
+        return String.valueOf(ch);
     }
 }

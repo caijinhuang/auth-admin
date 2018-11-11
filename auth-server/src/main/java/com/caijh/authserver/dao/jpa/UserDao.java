@@ -12,6 +12,8 @@ import com.caijh.authserver.entity.db.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author cjh
  * 用户信息持久化操作
@@ -24,7 +26,7 @@ public interface UserDao extends JpaRepository<User, String> {
      * @param phone 手机号码
      * @return 用户对象
      */
-    User findUserByAccountTypeAndPhone(String accountType,String phone);
+    List<User> findUserByAccountTypeAndPhone(String accountType, String phone);
 
     /**
      * 查询用和账户类型和邮件是否存在
@@ -32,5 +34,5 @@ public interface UserDao extends JpaRepository<User, String> {
      * @param email 邮箱
      * @return 用户对象
      */
-    User findUserByAccountTypeAndEmail(String accountType,String email);
+    List<User> findUserByAccountTypeAndEmail(String accountType,String email);
 }

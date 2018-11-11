@@ -11,10 +11,14 @@ package com.caijh.authserver.web.exception;
 import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.entity.view.ResponseData;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author cjh
@@ -24,8 +28,34 @@ import javax.servlet.http.HttpServletRequest;
 @Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     /**
-     * 系统异常处理，比如：404,500
+     * 处理数据校验绑定异常
+     *
+     * @param e
+     * @param request
+     * @param response
+     * @return
+     */
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseData validExceptionHandler(MethodArgumentNotValidException e) {
+
+        List<ObjectError> objectErrors = e.getBindingResult().getAllErrors();
+        String errorMsg = objectErrors.get(0).getDefaultMessage();
+        for (ObjectError error : objectErrors) {
+            if (error instanceof FieldError) {
+                FieldError err = (FieldError) error;
+                log.error("{}:{}", err.getField(), err.getDefaultMessage());
+            } else {
+                log.error("对象{}:{}", error.getObjectName(), error.getDefaultMessage());
+            }
+        }
+
+        return ResponseData.build(null, errorMsg, ResultCode.REGISTER_FAIL.getCode());
+    }
+
+    /**
+     * 系统异常通用处理，比如：404,500
      *
      * @param req
      * @param resp
@@ -39,7 +69,9 @@ public class GlobalExceptionHandler {
         if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
             return ResponseData.failed(ResultCode.NOT_FOUND);
         } else {
-            return ResponseData.build(null,e.getMessage(),ResultCode.SYS_INNER_ERROR.getCode());
+            String errorMsg = ResultCode.SYS_INNER_ERROR.getMessage() + ":" + e.getMessage();
+            return ResponseData.build(null, errorMsg, ResultCode.SYS_INNER_ERROR.getCode());
         }
     }
+
 }
