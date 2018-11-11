@@ -13,6 +13,7 @@ import com.caijh.authserver.dao.jpa.UserDao;
 import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.ResponseData;
 import com.caijh.authserver.service.api.UserService;
+import com.caijh.authserver.utils.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             String accountType = user.getAccountType();
-            String typeUpper = toUpperCase(accountType);
+            String typeUpper = StringUtils.toUpperCase(accountType);
             Method userMethod = user.getClass().getMethod("get" + typeUpper);
             Method daoMethod = userDao.getClass().getMethod("findUserByAccountTypeAnd" + typeUpper,
                     String.class,
@@ -85,18 +86,5 @@ public class UserServiceImpl implements UserService {
         if (!userList.isEmpty()) {
             throw new RuntimeException("注册失败：用户已经存在!");
         }
-    }
-
-
-    /**
-     * 首字母转成大写
-     *
-     * @param str 要转换的字符串
-     * @return 转换后的字符串
-     */
-    private String toUpperCase(String str) {
-        char[] ch = str.toCharArray();
-        ch[0] -= 32;
-        return String.valueOf(ch);
     }
 }

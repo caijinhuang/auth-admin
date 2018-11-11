@@ -19,7 +19,8 @@ import com.caijh.authserver.entity.view.ResponseData;
 public interface UserService {
     /**
      * 用户注册
+     * @param user 用户信息对象
      * @return 是否注册成功
      */
-    public ResponseData register(User user);
+    ResponseData register(User user);
 }

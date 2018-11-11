@@ -1,12 +1,13 @@
 /***************************************************************************************************
  *  Copyright (c) 2018  the original author or authors
  *  @author: 小Cai先森
- *  @lastModified: 18-11-4 下午10:42
- *  @createTime: 2018-11-04 22:42:05
- *  @classPath: com.caijh.authserver.web.exception.GlobalExceptionHandler
+ *  @lastModified: 18-11-11 下午1:01
+ *  @createTime: 2018-11-11 19:58:22
+ *  @classPath: com.caijh.authserver.web.advice.GlobalExceptionHandler
+ *  @blog: http://www.cnblogs.com/caijh/default.html?page=1
  **************************************************************************************************/
 
-package com.caijh.authserver.web.exception;
+package com.caijh.authserver.web.advice;
 
 import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.entity.view.ResponseData;

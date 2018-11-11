@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 
 /**
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJack
  * 统一的restful响应格式
  */
 @Log4j2
-@ControllerAdvice(basePackages = "com.caijh.authserver.web.controller")
+@RestControllerAdvice
 public class ResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
     @Override
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer,

@@ -1,3 +1,12 @@
+/***************************************************************************************************
+ *  Copyright (c) 2018  the original author or authors
+ *  @author: 小Cai先森
+ *  @lastModified: 18-11-11 下午2:36
+ *  @createTime: 2018-11-11 15:17:55
+ *  @classPath: com.caijh.authserver.entity.db.User
+ *  @blog: http://www.cnblogs.com/caijh/default.html?page=1
+ **************************************************************************************************/
+
 package com.caijh.authserver.entity.db;
 
 import com.caijh.authserver.annotations.UserAccount;
