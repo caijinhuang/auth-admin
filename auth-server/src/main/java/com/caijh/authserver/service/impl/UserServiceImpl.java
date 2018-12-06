@@ -8,6 +8,8 @@
 
 package com.caijh.authserver.service.impl;
 
+import com.caijh.authserver.constant.message.SysHint;
+import com.caijh.authserver.constant.message.UserHint;
 import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.dao.jpa.UserDao;
 import com.caijh.authserver.entity.db.User;
@@ -22,8 +24,6 @@ import org.springframework.util.DigestUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -36,6 +36,21 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Override
+    public boolean login(User user) {
+        User userInfo = findUser(user, true);
+        if (userInfo == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean loginOut(User user) {
+        return false;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,10 +69,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userDao.save(user);
         } catch (RuntimeException e) {
-            log.error("注册失败了！", e);
-            throw new RuntimeException("注册失败，请重试！");
+            log.error(UserHint.REGISTER_FAIL, e);
+            throw new RuntimeException(UserHint.REGISTER_FAIL);
         }
-        return ResponseData.success("恭喜你！注册成功！");
+        return ResponseData.success(UserHint.REGISTER_SUCCESS);
     }
 
     /**
@@ -67,24 +82,43 @@ public class UserServiceImpl implements UserService {
      * @return 是否有效
      */
     private void accountValidate(User user) {
-        List<User> userList = new ArrayList<>();
+        User oldUser;
+        try {
+            oldUser = findUser(user, false);
+        } catch (Exception e) {
+            throw new RuntimeException(UserHint.REGISTER_FAIL);
+        }
 
+        if (oldUser != null) {
+            throw new RuntimeException(UserHint.USER_EXIST);
+        }
+    }
+
+    /**
+     * 查询指定用户信息
+     *
+     * @param user
+     * @return
+     */
+    private User findUser(User user, boolean isLogin) {
+        // 如果是登陆的信息
+        if (isLogin) {
+
+        }
+        User oldUser;
         try {
             String accountType = user.getAccountType();
             String typeUpper = StringUtils.toUpperCase(accountType);
             Method userMethod = user.getClass().getMethod("get" + typeUpper);
-            Method daoMethod = userDao.getClass().getMethod("findUserByAccountTypeAnd" + typeUpper,
-                    String.class,
+            Method daoMethod = userDao.getClass().getMethod("findUserByAccountTypeAnd" + typeUpper, String.class,
                     String.class);
             String value = userMethod.invoke(user).toString();
-            userList = (List<User>) daoMethod.invoke(userDao, accountType, value);
+            oldUser = (User) daoMethod.invoke(userDao, accountType, value);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            log.error("用户注册反射执行失败:{}", e);
-            throw new RuntimeException("注册失败");
+            log.error(SysHint.REFLECT_FAIL, e);
+            throw new RuntimeException(SysHint.SYSTEM_INNER_ERRROR);
         }
 
-        if (!userList.isEmpty()) {
-            throw new RuntimeException("注册失败：用户已经存在!");
-        }
+        return oldUser;
     }
 }

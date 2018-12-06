@@ -8,6 +8,8 @@
 
 package com.caijh.authserver.web.controller;
 
+import com.caijh.authserver.constant.message.UserHint;
+import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.ResponseData;
 import com.caijh.authserver.service.api.UserService;
@@ -35,8 +37,17 @@ public class UserController {
     /**
      * 用户信息注册
      */
-    @PostMapping("/register")
-    public ResponseData login(@RequestBody @Valid User user) {
+    @PostMapping("/register.do")
+    public ResponseData register(@RequestBody @Valid User user) {
         return userService.register(user);
+    }
+
+    @PostMapping("/login.do")
+    public ResponseData login(@RequestBody @Valid User user) {
+        boolean success = userService.login(user);
+        if(success){
+            return ResponseData.success(UserHint.LOGIN_SUCCESS);
+        }
+        return ResponseData.failed(ResultCode.LOGIN_FAIL);
     }
 }

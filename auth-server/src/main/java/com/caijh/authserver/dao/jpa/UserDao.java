@@ -26,7 +26,7 @@ public interface UserDao extends JpaRepository<User, String> {
      * @param phone 手机号码
      * @return 用户对象
      */
-    List<User> findUserByAccountTypeAndPhone(String accountType, String phone);
+    User findUserByAccountTypeAndPhone(String accountType, String phone);
 
     /**
      * 查询用和账户类型和邮件是否存在
@@ -34,5 +34,5 @@ public interface UserDao extends JpaRepository<User, String> {
      * @param email 邮箱
      * @return 用户对象
      */
-    List<User> findUserByAccountTypeAndEmail(String accountType,String email);
+    User findUserByAccountTypeAndEmail(String accountType,String email);
 }

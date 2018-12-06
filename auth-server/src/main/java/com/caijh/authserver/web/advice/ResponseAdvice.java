@@ -37,4 +37,5 @@ public class ResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
             bodyContainer.setValue(ResponseData.success(value));
         }
     }
+
 }

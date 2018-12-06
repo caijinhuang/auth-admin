@@ -40,8 +40,8 @@ public class User implements Serializable {
     /**
      * 密码
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "密码不能为空")
+    @NotBlank(message = "密码不能为空")
     private String password;
 
     /**
