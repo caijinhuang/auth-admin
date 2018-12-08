@@ -28,9 +28,9 @@ public interface UserService {
     /**
      * 用户登陆
      * @param user 用户请求对象
-     * @return 用户信息
+     * @return token信息
      */
-    boolean login(User user);
+    String login(User user);
 
     /**
      * 退出登陆

@@ -33,10 +33,10 @@ public class GlobalExceptionHandler {
     /**
      * 处理数据校验绑定异常
      *
-     * @param e
-     * @param request
-     * @param response
-     * @return
+     * @param e 异常信息
+     * @param request 请求体
+     * @param response 响应体
+     * @return ResponseData对象
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseData validExceptionHandler(MethodArgumentNotValidException e) {
@@ -58,11 +58,11 @@ public class GlobalExceptionHandler {
     /**
      * 系统异常通用处理，比如：404,500
      *
-     * @param req
-     * @param resp
-     * @param e
-     * @return
-     * @throws Exception
+     * @param req http请求体
+     * @param resp 响应体
+     * @param e 异常信息
+     * @return ResponseData对象
+     * @throws Exception 异常处理信息
      */
     @ExceptionHandler(value = Exception.class)
     public ResponseData defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {

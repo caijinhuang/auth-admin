@@ -45,13 +45,17 @@ public class AccountTypeConstraint implements ConstraintValidator<UserAccount, O
                 /**
                  * 创建新的提示说明
                  */
-                context.buildConstraintViolationWithTemplate("邮箱不能为空").addPropertyNode("email").addConstraintViolation();
+                context.buildConstraintViolationWithTemplate("邮箱不能为空")
+                        .addPropertyNode("email")
+                        .addConstraintViolation();
                 return false;
             }
         } else {
             if (StringUtils.isEmpty(user.getPhone())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate("电话号码不能为空").addPropertyNode("phone").addConstraintViolation();
+                context.buildConstraintViolationWithTemplate("电话号码不能为空")
+                        .addPropertyNode("phone")
+                        .addConstraintViolation();
                 return false;
             }
         }

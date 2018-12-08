@@ -101,4 +101,15 @@ public class ResponseData<T> {
         return new ResponseData<T>(data, message, code);
     }
 
+    /**
+     * 创建返回对象
+     * @param data 数据
+     * @param responseCode 响应代码
+     * @param <T> 数据类型
+     * @return 报文对象
+     */
+    public static <T> ResponseData build(T data, BaseResponseCode responseCode) {
+        return new ResponseData<T>(data, responseCode.getMessage(), responseCode.getCode());
+    }
+
 }

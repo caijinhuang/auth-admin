@@ -9,6 +9,8 @@
 
 package com.caijh.authserver.utils;
 
+import java.util.UUID;
+
 /**
  * @author cjh
  * 字符串处理工具
@@ -26,5 +28,14 @@ public class StringUtils {
         char[] ch = str.toCharArray();
         ch[0] -= 32;
         return String.valueOf(ch);
+    }
+
+    /**
+     * 获取UUID
+     * @return uuid
+     */
+    public static String getUUID(){
+        String uuid = UUID.randomUUID().toString().replace("-","");
+        return uuid;
     }
 }
