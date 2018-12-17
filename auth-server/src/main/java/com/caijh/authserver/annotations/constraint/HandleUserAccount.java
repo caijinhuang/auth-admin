@@ -3,11 +3,11 @@
  *  @author: 小Cai先森
  *  @lastModified: 18-11-10 下午10:16
  *  @createTime: 2018-11-10 22:25:19
- *  @classPath: com.caijh.authserver.constraint.AccountTypeConstraint
+ *  @classPath: com.caijh.authserver.annotations.constraint.AccountTypeConstraint
  *  @blog: http://www.cnblogs.com/caijh/default.html?page=1
  **************************************************************************************************/
 
-package com.caijh.authserver.constraint;
+package com.caijh.authserver.annotations.constraint;
 
 import com.caijh.authserver.annotations.UserAccount;
 import com.caijh.authserver.constant.userenum.AccountType;
@@ -21,7 +21,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author cjh
  * 用户账号类型约束
  */
-public class AccountTypeConstraint implements ConstraintValidator<UserAccount, Object> {
+public class HandleUserAccount implements ConstraintValidator<UserAccount, Object> {
 
     @Override
     public void initialize(UserAccount constraintAnnotation) {

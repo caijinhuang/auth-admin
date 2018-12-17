@@ -84,10 +84,9 @@ public class TokenHelper {
      * 解析token
      *
      * @param tokenStr  token字符串
-     * @param timeStamp 时间戳
      * @return token校验结果对象
      */
-    public static Token parseToken(String tokenStr, long timeStamp) {
+    public static Token parseToken(String tokenStr) {
 
         /**
          * token有效性验证
@@ -115,6 +114,7 @@ public class TokenHelper {
         String bodyJson = EncryptUtils.base64Decode(jwt[1]);
         JwtBody body = JSON.parseObject(bodyJson, JwtBody.class);
         JwtHead head = JSON.parseObject(headJson, JwtHead.class);
+        long timeStamp = Calendar.getInstance().getTimeInMillis();
         long diffTime = timeStamp - Long.valueOf(body.getExpiryDate());
         boolean isExpired = diffTime > 0;
         if (isExpired) {

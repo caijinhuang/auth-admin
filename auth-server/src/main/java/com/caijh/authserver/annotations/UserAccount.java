@@ -9,7 +9,7 @@
 
 package com.caijh.authserver.annotations;
 
-import com.caijh.authserver.constraint.AccountTypeConstraint;
+import com.caijh.authserver.annotations.constraint.HandleUserAccount;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AccountTypeConstraint.class)
+@Constraint(validatedBy = HandleUserAccount.class)
 public @interface UserAccount {
     String message() default "{javax.validation.constraints.NotBlank.message}";
 
