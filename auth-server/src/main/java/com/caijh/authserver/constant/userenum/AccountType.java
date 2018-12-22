@@ -31,7 +31,7 @@ public enum AccountType {
     }
 
     /**
-     * 获取账户类型的美剧对象
+     * 获取账户类型的枚举对象
      * @param typeKey 账户类型关键词
      * @return 对应的枚举对象
      */

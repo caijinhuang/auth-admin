@@ -38,7 +38,7 @@ public class RedisCacheConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        log.info("redis连接信息：{}",factory.getConnection().info());
+        log.info("redis连接信息：{}", factory.getConnection().info());
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         /**
@@ -50,4 +50,5 @@ public class RedisCacheConfig {
         template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
     }
+
 }

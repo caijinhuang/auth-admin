@@ -12,6 +12,7 @@ import com.caijh.authserver.constant.message.SysHint;
 import com.caijh.authserver.constant.message.UserHint;
 import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.dao.jpa.UserDao;
+import com.caijh.authserver.dao.redis.impl.TokenCache;
 import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.LoginUser;
 import com.caijh.authserver.entity.view.ResponseData;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private TokenCache tokenCache;
 
     @Override
     public String login(User user) {
@@ -46,7 +49,8 @@ public class UserServiceImpl implements UserService {
         if (userInfo == null) {
             return null;
         }
-        String token = TokenHelper.create(MapUtils.objectToObject(userInfo, LoginUser.class));
+        String token = userInfo.getUserId();
+        tokenCache.setToken(token,userInfo,30);
         return token;
     }
 

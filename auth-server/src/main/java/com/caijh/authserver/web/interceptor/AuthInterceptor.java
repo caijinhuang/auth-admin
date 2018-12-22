@@ -10,11 +10,12 @@
 package com.caijh.authserver.web.interceptor;
 
 import com.caijh.authserver.constant.response.ResultCode;
-import com.caijh.authserver.entity.token.Token;
+import com.caijh.authserver.dao.redis.impl.TokenCache;
+import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.ResponseData;
-import com.caijh.authserver.web.token.TokenHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,28 +33,32 @@ import java.io.PrintWriter;
 @Log4j2
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private TokenCache tokenCache;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String tokenStr = request.getHeader("accessToken");
+        String token = request.getHeader("accessToken");
         Cookie[] cookies = request.getCookies();
-        if (tokenStr == null) {
+        if (token == null) {
             for (Cookie cookie : cookies) {
                 if ("accessToken".equals(cookie.getName())) {
-                    tokenStr = cookie.getValue();
+                    token = cookie.getValue();
                     break;
                 }
             }
         }
-        if (tokenStr == null) {
+        if (token == null) {
             returnErrorMessage(response, ResponseData.failed(ResultCode.INVALID_AUTHCODE));
             return false;
         }
-        Token token = TokenHelper.parseToken(tokenStr);
-        if (!token.isValid()) {
-            returnErrorMessage(response,
-                    ResponseData.build(null,token.getMsg(),ResultCode.INVALID_AUTHCODE.getCode()));
+        User user = (User) tokenCache.getToken(token);
+        if (user == null) {
+            returnErrorMessage(response, ResponseData.failed(ResultCode.NOT_LOGIN));
             return false;
         }
+        tokenCache.setToken(token, user, 30);
         return true;
     }
 

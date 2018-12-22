@@ -79,7 +79,7 @@ public enum ResultCode implements BaseResponseCode{
     /**
      * AuthCode错误
      */
-    INVALID_AUTHCODE("444", "无效的AuthCode"),
+    INVALID_AUTHCODE("444", "无效的TOKEN"),
 
     /**
      * 太频繁的调用
