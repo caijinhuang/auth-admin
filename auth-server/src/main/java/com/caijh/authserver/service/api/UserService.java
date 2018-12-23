@@ -10,7 +10,7 @@ package com.caijh.authserver.service.api;
 
 
 import com.caijh.authserver.entity.db.User;
-import com.caijh.authserver.entity.view.LoginUser;
+import com.caijh.authserver.entity.query.LoginUser;
 import com.caijh.authserver.entity.view.ResponseData;
 
 /**
@@ -30,12 +30,12 @@ public interface UserService {
      * @param user 用户请求对象
      * @return token信息
      */
-    String login(User user);
+    String login(User user,String terminal);
 
     /**
      * 退出登陆
-     * @param user 用户请求对象
+     * @param token token值
      * @return 是否退出成功
      */
-    boolean loginOut(User user);
+    void loginOut(String token);
 }

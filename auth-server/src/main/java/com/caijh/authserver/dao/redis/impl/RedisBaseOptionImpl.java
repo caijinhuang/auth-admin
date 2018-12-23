@@ -10,8 +10,10 @@
 package com.caijh.authserver.dao.redis.impl;
 
 import com.caijh.authserver.dao.redis.api.RedisBaseOption;
+import com.caijh.authserver.utils.MapUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -34,9 +36,7 @@ public class RedisBaseOptionImpl implements RedisBaseOption {
     /**
      * 前缀
      */
-    public static final String KEY_PRIFIX_VALUE = "auth:value:";
-    public static final String KEY_PRIFIX_SET = "auth:set:";
-    public static final String KEY_PRIFIX_LIST = "auth:list:";
+    public static final String KEY_PRIFIX = "auth";
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -64,17 +64,16 @@ public class RedisBaseOptionImpl implements RedisBaseOption {
 
     @Override
     public void remove(String... keys) {
-
+        redisTemplate.delete(keys);
     }
 
     @Override
     public void removePattern(String pattern) {
-
     }
 
     @Override
     public void remove(String key) {
-
+        redisTemplate.delete(key);
     }
 
     @Override
@@ -89,8 +88,14 @@ public class RedisBaseOptionImpl implements RedisBaseOption {
     }
 
     @Override
-    public void hashSet(String key, Object hashKey, Object value) {
+    public Set keys(String key, String prefix, String suffix) {
+        return redisTemplate.keys(prefix + key + suffix);
+    }
 
+    @Override
+    public void hashSet(String key, Object hashKey, Object value) {
+        HashOperations operations = redisTemplate.opsForHash();
+        operations.putAll(key, MapUtils.objectToMap(value));
     }
 
     @Override

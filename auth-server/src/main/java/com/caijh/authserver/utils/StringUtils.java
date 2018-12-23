@@ -15,7 +15,7 @@ import java.util.UUID;
  * @author cjh
  * 字符串处理工具
  */
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
 
     /**

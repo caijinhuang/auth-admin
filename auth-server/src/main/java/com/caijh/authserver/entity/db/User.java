@@ -10,6 +10,7 @@
 package com.caijh.authserver.entity.db;
 
 import com.caijh.authserver.annotations.UserAccount;
+import com.caijh.authserver.constant.userenum.AccountType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -55,7 +56,7 @@ public class User implements Serializable {
     /**
      * 电话号码
      */
-    @Pattern(regexp = "^(?:[1][3578]\\d{9})?$",message = "手机号码格式不正确")
+    @Pattern(regexp = "^(?:[1][3578]\\d{9})?$", message = "手机号码格式不正确")
     @Column(name = "PHONE")
     private String phone;
 
@@ -77,4 +78,15 @@ public class User implements Serializable {
     private String createTime;
     private String updateTime;
 
+    /**
+     * 根据账户类型获取账号
+     * @param accountType 账号类型
+     * @return 账号
+     */
+    public String getAccountByType(String accountType) {
+        if (accountType.equals(AccountType.Email.getKey())) {
+            return email;
+        }
+        return phone;
+    }
 }

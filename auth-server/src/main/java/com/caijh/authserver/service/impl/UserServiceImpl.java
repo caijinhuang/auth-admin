@@ -14,12 +14,9 @@ import com.caijh.authserver.constant.response.ResultCode;
 import com.caijh.authserver.dao.jpa.UserDao;
 import com.caijh.authserver.dao.redis.impl.TokenCache;
 import com.caijh.authserver.entity.db.User;
-import com.caijh.authserver.entity.view.LoginUser;
 import com.caijh.authserver.entity.view.ResponseData;
 import com.caijh.authserver.service.api.UserService;
-import com.caijh.authserver.utils.MapUtils;
 import com.caijh.authserver.utils.StringUtils;
-import com.caijh.authserver.web.token.TokenHelper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,19 +41,20 @@ public class UserServiceImpl implements UserService {
     private TokenCache tokenCache;
 
     @Override
-    public String login(User user) {
+    public String login(User user, String terminal) {
         User userInfo = findUser(user, true);
         if (userInfo == null) {
             return null;
         }
-        String token = userInfo.getUserId();
-        tokenCache.setToken(token,userInfo,30);
+
+        String token = StringUtils.getUUID();
+        tokenCache.setToken(token, userInfo, terminal, 30);
         return token;
     }
 
     @Override
-    public boolean loginOut(User user) {
-        return false;
+    public void loginOut(String token) {
+        tokenCache.remove(tokenCache.getTokenKeyFromRedis(token));
     }
 
     @Override

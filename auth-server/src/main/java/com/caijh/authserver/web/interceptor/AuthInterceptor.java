@@ -9,12 +9,15 @@
 
 package com.caijh.authserver.web.interceptor;
 
+import com.caijh.authserver.constant.message.SysHint;
 import com.caijh.authserver.constant.response.ResultCode;
+import com.caijh.authserver.constant.userenum.Terminal;
 import com.caijh.authserver.dao.redis.impl.TokenCache;
 import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.view.ResponseData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -39,7 +42,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("accessToken");
+        String token = request.getHeader("ACCESS-TOKEN");
+        String terminal = request.getHeader("TERMINAL");
+        if (StringUtils.isEmpty(terminal) || !Terminal.isLegal(terminal)) {
+            returnErrorMessage(response,
+                    ResponseData.build(null, SysHint.UNDEFINED_SOURCE, ResultCode.LOGIN_FAIL.getCode()));
+            return false;
+        }
         Cookie[] cookies = request.getCookies();
         if (token == null) {
             for (Cookie cookie : cookies) {
@@ -53,12 +62,12 @@ public class AuthInterceptor implements HandlerInterceptor {
             returnErrorMessage(response, ResponseData.failed(ResultCode.INVALID_AUTHCODE));
             return false;
         }
-        User user = (User) tokenCache.getToken(token);
+        User user = (User) tokenCache.getUserInfoByToken(token,terminal);
         if (user == null) {
             returnErrorMessage(response, ResponseData.failed(ResultCode.NOT_LOGIN));
             return false;
         }
-        tokenCache.setToken(token, user, 30);
+        tokenCache.setToken(token, user, terminal, 30);
         return true;
     }
 

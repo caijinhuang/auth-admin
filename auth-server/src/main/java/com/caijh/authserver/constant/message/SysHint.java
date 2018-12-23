@@ -15,6 +15,7 @@ package com.caijh.authserver.constant.message;
  * 系统相关提示信息
  */
 public class SysHint {
+    public static final String UNDEFINED_SOURCE = "不明来源的请求";
     public static final String REFLECT_FAIL = "反射执行失败!";
     public static final String SYSTEM_INNER_ERRROR = "系统内部异常,请联系管理员";
     public static final String SQL_EXECUTION_EXCEPTION = "SQL执行异常";

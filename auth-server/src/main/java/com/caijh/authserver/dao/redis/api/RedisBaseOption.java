@@ -76,6 +76,13 @@ public interface RedisBaseOption {
     public Object get(final String key);
 
     /**
+     * 模糊查询关键字
+     * @param key
+     * @return
+     */
+    public Set keys(String key, String prefix, String suffix);
+
+    /**
      * 哈希添加
      *
      * @param key

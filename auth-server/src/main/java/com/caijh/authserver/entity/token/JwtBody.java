@@ -9,7 +9,7 @@
 
 package com.caijh.authserver.entity.token;
 
-import com.caijh.authserver.entity.view.LoginUser;
+import com.caijh.authserver.entity.view.UserInfo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -44,5 +44,5 @@ public class JwtBody {
     /**
      * 用户信息
      */
-    private LoginUser userInfo;
+    private UserInfo userInfo;
 }

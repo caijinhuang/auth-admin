@@ -14,7 +14,7 @@ import com.caijh.authserver.constant.message.AuthHint;
 import com.caijh.authserver.entity.token.JwtBody;
 import com.caijh.authserver.entity.token.JwtHead;
 import com.caijh.authserver.entity.token.Token;
-import com.caijh.authserver.entity.view.LoginUser;
+import com.caijh.authserver.entity.view.UserInfo;
 import com.caijh.authserver.utils.EncryptUtils;
 import com.caijh.authserver.utils.StringUtils;
 import lombok.extern.log4j.Log4j2;
@@ -54,7 +54,7 @@ public class TokenHelper {
      * @param userInfo 用户信息
      * @return token字符串
      */
-    public static String create(LoginUser userInfo) {
+    public static String create(UserInfo userInfo) {
         /**
          * 时间戳
          */

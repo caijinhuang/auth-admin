@@ -16,7 +16,7 @@ import lombok.Data;
  * 登陆用户的信息
  */
 @Data
-public class LoginUser {
+public class UserInfo {
 
     private String userId;
     /**
