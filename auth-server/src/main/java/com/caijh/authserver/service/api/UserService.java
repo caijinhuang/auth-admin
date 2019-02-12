@@ -13,6 +13,8 @@ import com.caijh.authserver.entity.db.User;
 import com.caijh.authserver.entity.query.LoginUser;
 import com.caijh.authserver.entity.view.ResponseData;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author cjh
  * 用户服务
@@ -37,5 +39,5 @@ public interface UserService {
      * @param token token值
      * @return 是否退出成功
      */
-    void loginOut(String token);
+    void loginOut(HttpServletRequest request);
 }

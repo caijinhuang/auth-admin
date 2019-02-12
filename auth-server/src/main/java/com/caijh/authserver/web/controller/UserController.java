@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -63,8 +64,7 @@ public class UserController {
 
     @GetMapping("/loginOut.do")
     public ResponseData loginOut(HttpServletRequest request) {
-        String token = request.getHeader("ACCESS-TOKEN");
-        userService.loginOut(token);
+        userService.loginOut(request);
         return ResponseData.success("已退出登陆！");
     }
 

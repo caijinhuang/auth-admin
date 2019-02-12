@@ -16,6 +16,8 @@ import io.netty.util.internal.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
 /**
@@ -44,6 +46,25 @@ public class TokenCache extends RedisBaseOptionImpl {
         }
         set(redisKey, user, expireTime);
         return redisKey;
+    }
+
+    /**
+     * 获取请求对象token信息
+     * @param request
+     * @return
+     */
+    public String getToken(HttpServletRequest request){
+        String token = request.getHeader("ACCESS-TOKEN");
+        Cookie[] cookies = request.getCookies();
+        if (token == null && cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        return token;
     }
 
 

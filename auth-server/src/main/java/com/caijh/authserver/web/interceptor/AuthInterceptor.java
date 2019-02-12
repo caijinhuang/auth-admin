@@ -42,27 +42,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("ACCESS-TOKEN");
+        String token = tokenCache.getToken(request);
         String terminal = request.getHeader("TERMINAL");
         if (StringUtils.isEmpty(terminal) || !Terminal.isLegal(terminal)) {
             returnErrorMessage(response,
                     ResponseData.build(null, SysHint.UNDEFINED_SOURCE, ResultCode.LOGIN_FAIL.getCode()));
             return false;
         }
-        Cookie[] cookies = request.getCookies();
-        if (token == null) {
-            for (Cookie cookie : cookies) {
-                if ("accessToken".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
         if (token == null) {
             returnErrorMessage(response, ResponseData.failed(ResultCode.INVALID_AUTHCODE));
             return false;
         }
-        User user = (User) tokenCache.getUserInfoByToken(token,terminal);
+        User user = (User) tokenCache.getUserInfoByToken(token, terminal);
         if (user == null) {
             returnErrorMessage(response, ResponseData.failed(ResultCode.NOT_LOGIN));
             return false;

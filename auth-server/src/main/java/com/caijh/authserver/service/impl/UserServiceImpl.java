@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -53,7 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void loginOut(String token) {
+    public void loginOut(HttpServletRequest request) {
+        String token = tokenCache.getToken(request);
         tokenCache.remove(tokenCache.getTokenKeyFromRedis(token));
     }
 
