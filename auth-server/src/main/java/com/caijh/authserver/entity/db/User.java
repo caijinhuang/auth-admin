@@ -36,6 +36,7 @@ public class User implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
+    @Column(name="USER_ID")
     private String userId;
 
     /**
@@ -75,7 +76,9 @@ public class User implements Serializable {
     private String birthday;
     private String icon;
     private String status;
+    @Column(name = "CREATE_TIME")
     private String createTime;
+    @Column(name = "UPDATE_TIME")
     private String updateTime;
 
     /**
