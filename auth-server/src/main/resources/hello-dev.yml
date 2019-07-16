@@ -2,3 +2,5 @@ hello:
   world: 你好
 jdbc:
   test: hello jdbc, im fine
+test:
+  name: 我是git啦
